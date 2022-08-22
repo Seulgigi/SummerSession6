@@ -2,7 +2,8 @@
 from django.shortcuts import get_object_or_404, render
 
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Movie, Review
 from .serializers import  MovieListSerializer, ReviewListSerializer
@@ -10,6 +11,7 @@ from .serializers import  MovieListSerializer, ReviewListSerializer
 # Create your views here.
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated]) #로그인시 이용
 def movie_list_create(request):
     if request.method == 'GET':
         movies = Movie.objects.all()
@@ -25,6 +27,7 @@ def movie_list_create(request):
             return Response(data=serializer.data)
 
 @api_view(['GET', 'PATCH', 'DELETE'])
+@permission_classes([IsAuthenticated]) #로그인시 이용
 def movie_detail_update_delete(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
 
@@ -48,6 +51,7 @@ def movie_detail_update_delete(request, movie_pk):
 
 # review
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated]) #로그인시 이용
 def review_list_create(request):
     if request.method == 'GET':
         reviews = Review.objects.all()
@@ -63,6 +67,7 @@ def review_list_create(request):
             return Response(data=serializer.data)
 
 @api_view(['GET', 'PATCH', 'DELETE'])
+@permission_classes([IsAuthenticated]) #로그인시 이용
 def review_detail_update_delete(request, pk):
     review = get_object_or_404(Review, pk=pk)
 
